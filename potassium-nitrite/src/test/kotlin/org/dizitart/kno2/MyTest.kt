@@ -99,6 +99,7 @@ class MyTest {
 
         database.use {
             assertThat(database.getRepository<Person>().size(), equalTo(10))
+            assertThat(database.getRepository<Person>().find().firstOrNull().nitriteId, equalTo("[1970456206405545984]NO₂"))
         }
     }
 
@@ -111,7 +112,8 @@ class MyTest {
         @Id
         val id: String,
         val name: String,
-        val yearOfBirth: Int
+        val yearOfBirth: Int,
+        val nitriteId: String? = null
     )
 
     class PersonEntityConverter : EntityConverter<Person> {
@@ -130,7 +132,8 @@ class MyTest {
             return Person(
                 id = document.get(Person::id.name, String::class.java),
                 name = document.get(Person::name.name, String::class.java),
-                yearOfBirth = document.get(Person::yearOfBirth.name, Int::class.java)
+                yearOfBirth = document.get(Person::yearOfBirth.name) as Int,
+                nitriteId = document.id.toString()
             )
         }
     }
